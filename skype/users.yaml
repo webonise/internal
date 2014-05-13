@@ -1,0 +1,10 @@
+robertcfischer:         # Skype ID
+  name: Robert Fischer  # Human name
+  aliases:              # Other ways to refer to the user
+    - Robert            # Note that these are case-insensitive
+    - Robert.Fischer    # This one is actually automatically added
+
+stiffnecked:
+  name: Rich Davis
+  aliases:
+    - Rich

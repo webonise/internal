@@ -1,0 +1,6 @@
+example:   # Id to read the call
+  name: "Example Call"
+  group: Sample
+  users:  # Can be aliases, names, phone numbers, etc.
+    - rich
+    - robert

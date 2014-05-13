@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src='http://code.jquery.com/jquery-2.1.1.min.js' type='text/javascript'></script>
+    <script src='http://www.skypeassets.com/i/scom/js/skype-uri.js' type='text/javascript'></script>
+    <style>
+      .skype-button {
+      	display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Webonise Skype Index Page</h1>
+    <ul>
+      <li>
+        <h2>
+          <a href='#calls'>Calls</a>
+        </h2>
+        <ul>
+        </ul>
+      </li>
+      <li>
+        <h2>
+          <a href='#users'>Users</a>
+        </h2>
+        <ul>
+          <li>
+            <a href='#user-robertcfischer'>Robert Fischer</a>
+          </li>
+          <li>
+            <a href='#user-stiffnecked'>Rich Davis</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <hr>
+    <h1 id='calls'>Calls</h1>
+    <h2 id='call-example'>
+      Example Call
+      <div class='skype-button' id='call-button-example'></div>
+    </h2>
+    <script>
+      $(function() {
+      	Skype.ui({
+      		name: 'dropdown',
+      		element: 'call-button-example',
+      		participants: [ "stiffnecked", "robertcfischer" ],
+      		topic: 'Example Call',
+      		listParticipants: true,
+      		imageSize: 24
+      	});
+      });
+    </script>
+    <h3>Participants</h3>
+    <ul>
+      <li>
+        <a href='#user-stiffnecked'>Rich Davis</a>
+      </li>
+      <li>
+        <a href='#user-robertcfischer'>Robert Fischer</a>
+      </li>
+    </ul>
+    <h3>Details</h3>
+    <ul>
+    </ul>
+    <hr>
+    <h1 id='users'>Users</h1>
+    <h2 id='user-robertcfischer'>
+      Robert Fischer
+      <div class='skype-button' id='user-button-robertcfischer'></div>
+    </h2>
+    <script>
+      $(function() {
+      	Skype.ui({
+      		name: 'dropdown',
+      		element: 'user-button-robertcfischer',
+      		participants: [ "robertcfischer" ],
+      		topic: 'Robert Fischer',
+      		imageSize: 24
+      	});
+      });
+    </script>
+    <h3>Details</h3>
+    <ul>
+      <li>
+        <strong>id:</strong>
+        robertcfischer
+      </li>
+    </ul>
+    <h2 id='user-stiffnecked'>
+      Rich Davis
+      <div class='skype-button' id='user-button-stiffnecked'></div>
+    </h2>
+    <script>
+      $(function() {
+      	Skype.ui({
+      		name: 'dropdown',
+      		element: 'user-button-stiffnecked',
+      		participants: [ "stiffnecked" ],
+      		topic: 'Rich Davis',
+      		imageSize: 24
+      	});
+      });
+    </script>
+    <h3>Details</h3>
+    <ul>
+      <li>
+        <strong>id:</strong>
+        stiffnecked
+      </li>
+    </ul>
+    <div id='SkypeButton'></div>
+  </body>
+</html>

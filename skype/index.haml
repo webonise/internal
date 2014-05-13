@@ -1,0 +1,102 @@
+- require_relative 'webonise-skype.rb'
+- data = WeboniseSkype.new
+- image_size = 24
+
+!!! 5
+%html
+	%head
+		-# Add your JavaScript URLs to include here without the 'HTTP://' prefix.
+		- ['code.jquery.com/jquery-2.1.1.min.js',
+			 'www.skypeassets.com/i/scom/js/skype-uri.js'].each do |url|
+			%script{:type => 'text/javascript', :src => "http://#{url}" }
+
+		-# Add your CSS URLs to include here without the 'HTTP://' prefix.
+		- [].each do |url|
+			%link{:rel => 'stylesheet', :type => 'text/css', :href=> "http://#{url}"}
+
+		:css
+			.skype-button {
+				display: inline-block;
+			}
+
+	%body
+		%h1 Webonise Skype Index Page
+
+		%ul
+			%li
+				%h2
+					%a{:href=>'#calls'} Calls
+				%ul
+					- data.call_groups.each_pair do |group,calls|
+						%li
+							%strong= group
+							%ul
+								- calls.each do |call|
+									%li
+										%a{:href=>"#call-#{call.id}"}= call.name
+			%li
+				%h2
+					%a{:href=>'#users'} Users
+				%ul
+					- data.users.each do |user|
+						%li
+							%a{:href=>"#user-#{user.id}"}= user.name
+
+		%hr
+
+		%h1#calls Calls
+		- data.calls.each do |call|
+			%h2{:id=>"call-#{call.id}"}
+				= call.name
+				%div{:id=>"call-button-#{call.id}", :class=>'skype-button'}
+			:javascript
+				$(function() {
+					Skype.ui({
+						name: 'dropdown',
+						element: 'call-button-#{call.id}',
+						participants: [ "#{call.users.collect(&:id).join("\", \"")}" ],
+						topic: '#{call.name}',
+						listParticipants: true,
+						imageSize: #{image_size}
+					});
+				});
+			%h3 Participants
+			%ul
+				- call.users.each do |user|
+					%li
+						%a{:href=>"#user-#{user.id}"}= user.name
+			%h3 Details
+			%ul
+				- call.each_pair do |key,value|
+					- unless [:group,:name,:users,:id].include?(key)
+						%li
+							%strong= "#{key}:"
+							= value
+
+		%hr
+
+		%h1#users Users
+		- users = data.users
+		- users.each do |user|
+			%h2{:id=>"user-#{user.id}"}
+				= user.name
+				%div{:id=>"user-button-#{user.id}", :class=>'skype-button'}
+			:javascript
+				$(function() {
+					Skype.ui({
+						name: 'dropdown',
+						element: 'user-button-#{user.id}',
+						participants: [ "#{user.id}" ],
+						topic: '#{user.name}',
+						imageSize: #{image_size}
+					});
+				});
+			%h3 Details
+			%ul
+				- user.each_pair do |key,value|
+					- unless [:aliases,:name].include?(key)
+						%li
+							%strong= "#{key}:"
+							= value
+
+		%div{:id=>"SkypeButton"}
