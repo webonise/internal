@@ -11,8 +11,6 @@ sub process_message($$) {
   my $msg = shift;
   if($msg =~ /Started ([A-Z]{3,4} ".*?")/) {
     $last_call{$thread} = $1;
-  } elsif($msg =~ /Parameters:\s*(\{.*\})\b/) {
-    $last_call{$thread} = "$last_call{$thread} [Parameters: $1]";
   } elsif($was_error{$thread}) {
     $errors{$last_call{$thread}}->{$msg} += 1;
   }
