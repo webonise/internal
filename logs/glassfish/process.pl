@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Script for processing the logs coming out of DRF's glassfish server, an example of which is example.log.
+
 use warnings;
 use strict;
 
@@ -12,9 +14,9 @@ sub process_message($$) {
   if($msg =~ /Started ([A-Z]{3,4} ".*?")/) {
     $last_call{$thread} = $1;
   } elsif($was_error{$thread}) {
-    $errors{$last_call{$thread}}->{$msg} += 1;
+    $errors{$msg}->{$last_call{$thread}} += 1;
   }
-  $was_error{$thread} = ($msg =~ /500 Internal Server Error/);
+  $was_error{$thread} = ($msg =~ /Completed 5\d\d .* in \d+ms/);
 }
 
 my $thread = "";
@@ -34,13 +36,26 @@ while(<>) {
   }
   $thread_messages{$thread} = $current_message;
   if($current_message =~ /^\s*(.+?)\s*\|#\]\s*$/s) {
-    process_message($thread, $1);
+    $current_message = $1;
+    $current_message =~ s/#<\w+:0x\w+>/#<Class:0x...>/;
+    process_message($thread, $current_message);
     $thread_messages{$thread} = "";
   }
 }
-for my $endpoint (keys %errors) {
-  for my $error (keys %{$errors{$endpoint}}) {
-    my $count = $errors{$endpoint}->{$error};
-    print "<<Error for $endpoint [$count occurrences]>>\n$error\n\n";
+
+my %error_count = ();
+for my $error (keys %errors) {
+  my %error_endpoints = %{$errors{$error}};
+  for my $endpoint (keys %{$errors{$error}}) {
+    $error_count{$error} += $errors{$error}->{$endpoint};
   }
+}
+
+for my $error (keys %errors) {
+  print "<<Error [$error_count{$error} total occurrences]>>\n$error\n<<Endpoints>>\n";
+  for my $endpoint (keys %{$errors{$error}}) {
+    my $count = $errors{$error}->{$endpoint};
+    print "\t$endpoint [$count occurrences]\n";
+  }
+  print "\n";
 }
