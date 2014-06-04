@@ -13,3 +13,5 @@ hs_err_pid*
 
 # Ignore vi swap files
 .*.swp
+
+.DS_Store
