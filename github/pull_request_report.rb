@@ -7,7 +7,7 @@ require './config.rb'
 unless self.respond_to? :print_hash
   def print_hash(hash)
     hash.each do |k,v|
-      puts "#{k}:\t\t#{v}"
+      printf "%20s => %s\n", k, v
     end
   end
 end
@@ -64,6 +64,6 @@ pulls.each do |pull|
 end
 joined_hash = Hash.new
 pulls_by_user.keys.each do |user|
-  joined_hash[user] = pulls_by_user[user].to_s + "\t" + last_pull_by_user[user].to_s
+  joined_hash[user] = pulls_by_user[user].to_s + "\tMost recent: " + last_pull_by_user[user].to_s
 end
 print_hash joined_hash
