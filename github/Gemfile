@@ -3,4 +3,4 @@ source "http://rubygems.org"
 
 gem "octokit", "~> 3.0"
 gem 'faraday-http-cache'
-gem "activesupport"
+gem "actionpack"
