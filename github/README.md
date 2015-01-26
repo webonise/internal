@@ -29,8 +29,34 @@ redefine_constant(:USERNAME, "RobertFischer")
 redefine_constant(:PASSWORD, "My Awesome Password")
 ```
 
-logger
+Logger
 -------
 
 By default, logging messages are written to standard error using Ruby's built-in message format.
 You can customize this behavior by manipulating or redefining the `LOGGER` constant in your configuration.
+
+Writing a Script
+------------------
+
+If you want to write a script, the opening line is:
+
+```ruby
+require_relative "init"
+```
+
+That gives you the following:
+
+1. `config.rb` and `#{SCRIPTNAME}_config.rb` loading.
+1. [Octokit](http://octokit.github.io/octokit.rb/) configuration, including verifying the user's login
+1. `LOGGER` loaded/configured
+1. `print_hash` for printing out hashes
+
+If you want to use additional configuration values, use the `default_constant` method (provided by `init`) as so:
+
+```ruby
+default_constant :PULL_STATE, "all"
+```
+
+That will enable people to provide values for your constant in their configuration without generating warnings.
+
+After that is done, go nuts with Octokit. Print your results to standard out.
