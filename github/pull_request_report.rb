@@ -1,6 +1,7 @@
 require_relative 'init'
+require 'pp'
 
-PULL_STATE = "all" unless defined? PULL_STATE
+default_constant :PULL_STATE, "all"
 
 # Retrieve the pull requests
 pulls = []
