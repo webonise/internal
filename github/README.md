@@ -50,6 +50,7 @@ That gives you the following:
 1. [Octokit](http://octokit.github.io/octokit.rb/) configuration, including verifying the user's login
 1. `LOGGER` loaded/configured
 1. `print_hash` for printing out hashes
+1. `nice_author` for turning author names as reported by GitHub into something nicer to read
 
 If you want to use additional configuration values, use the `default_constant` method (provided by `init`) as so:
 
