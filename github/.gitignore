@@ -1,2 +1,12 @@
-config.rb
+# Ignore the Gemfile lock
 Gemfile.lock
+
+# Ignore the global configuration
+# This is local user-specific (username/password)
+# The user should copy from config.sample.rb
+config.rb
+
+# Ignore the script-specific configuration
+# This is invocation-specific
+# The user can copy from *_config.sample.rb
+*_config.rb
