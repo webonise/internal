@@ -1,3 +1,5 @@
+# Provides a count of pull requests broken down by user, along with the most recent time for a pull request by that user.
+
 require_relative 'init'
 require 'pp'
 
