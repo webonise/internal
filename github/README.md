@@ -14,3 +14,23 @@ rbenv
 ------
 
 We use `rbenv` to fix the version of Ruby: `octokit` has some limitations. You are encouraged to install `rbenv` to make your life easier in the future.
+
+Configuration
+----------------
+
+The common configuration is done in `config.rb`, based on `config.sample.rb`. This is where configuration used by all scripts should go.
+
+Each script also optionally takes a `#{SCRIPTNAME}_config.rb` file, which provides the script-specific configuration values. You can also redefine
+constants, which you can do by doing something like the following from `#{SCRIPTNAME}_config.rb`:
+
+```ruby
+include RedefineConstant
+redefine_constant(:USERNAME, "RobertFischer")
+redefine_constant(:PASSWORD, "My Awesome Password")
+```
+
+logger
+-------
+
+By default, logging messages are written to standard error using Ruby's built-in message format.
+You can customize this behavior by manipulating or redefining the `LOGGER` constant in your configuration.
