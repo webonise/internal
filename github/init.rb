@@ -14,10 +14,17 @@ module DefaultConstant
 end
 include DefaultConstant
 
-# Provide access to useful bits of active_support
-require 'active_support'                    # Useful since Rails hand-rolled autoload for reasons known only to God and DHH
-require 'active_support/core_ext/date'      # Required for the date arithmetic we want below
-require 'active_support/core_ext/numeric'   # Provides 3.days.ago and the like
+# Pretty printer, if you really want it
+require 'pp'
+
+# Provide access to useful bits of actionpack
+require 'active_support'                        # Useful since Rails hand-rolled autoload for reasons known only to God and DHH
+require 'active_support/core_ext/object/blank'  # Because blank? is awesome
+require 'active_support/core_ext/date'          # Required for the date arithmetic we want below
+require 'active_support/core_ext/numeric'       # Provides 3.days.ago and the like
+require 'active_support/core_ext/string'        # Provides String.titleize
+require 'action_view'                           # For ActionView modules
+include ActionView::Helpers::DateHelper         # Provides time_ago_in_words
 
 # Configure the logger
 require 'logger'
@@ -54,6 +61,9 @@ else
   logger.info "No configuration file at #{scriptConfigFileName}; you can add script-specific configuration there, if you'd like"
 end
 
+# Now change our logging level to "debug" if we set DEBUG
+logger.level = Logger::DEBUG if defined?(DEBUG) and DEBUG
+
 # Describes out to print a hash: if you don't like it, redefine it in your config
 unless self.respond_to? :print_hash
   def print_hash(hash)
@@ -76,11 +86,20 @@ Octokit.configure do |c|
   c.web_endpoint = WEB_ENDPOINT unless WEB_ENDPOINT.empty? if WEB_ENDPOINT
 end
 
+# Configure the Octokit middleware for much awesome
 Octokit.middleware = Faraday::RackBuilder.new do |builder|
   builder.use Faraday::HttpCache            # Cache responses to stretch our rate limit
   builder.use Octokit::Response::RaiseError # Raise error on bad status codes
   builder.adapter Faraday.default_adapter   # Use Faraday's default adapter, because Octokit says to
 end
 
+# Create a canonical-ish appearance for authors
+def nice_author(author)
+  return nice_author("#{$2} #{$1}") if author =~ /^(.+),\s+(.+)$/
+  return nice_author("#{$1} #{$2}") if author =~ /^(.+)\.(.+)$/
+  return author.titleize
+end
+
 # Basic sanity check: queries GitHub for the user information
 logger.info "Executing as #{Octokit.user.login}"
+
