@@ -6,6 +6,15 @@ module RedefineConstant
   end
 end
 
+# Ability to
+module DefaultConstant
+  def default_constant(symbol, value)
+    self.class.const_set(symbol, value) unless self.class.const_defined?(symbol)
+  end
+end
+
+include DefaultConstant
+
 # Configure the logger
 require 'logger'
 LOGGER = Logger.new(STDERR)
@@ -53,7 +62,6 @@ end
 # Load Octokit
 require 'octokit'
 require 'faraday/http_cache'
-require 'pp'
 
 # Provide authentication credentials
 Octokit.configure do |c|
@@ -64,12 +72,11 @@ Octokit.configure do |c|
   c.web_endpoint = WEB_ENDPOINT unless WEB_ENDPOINT.empty? if WEB_ENDPOINT
 end
 
-# Cache responses to stretch our rate limit
 Octokit.middleware = Faraday::RackBuilder.new do |builder|
-  builder.use Faraday::HttpCache
-  builder.use Octokit::Response::RaiseError
-  builder.adapter Faraday.default_adapter
+  builder.use Faraday::HttpCache            # Cache responses to stretch our rate limit
+  builder.use Octokit::Response::RaiseError # Raise error on bad status codes
+  builder.adapter Faraday.default_adapter   # Use Faraday's default adapter, because Octokit says to
 end
 
-# Basic sanity check
+# Basic sanity check: queries GitHub for the user information
 logger.info "Executing as #{Octokit.user.login}"
