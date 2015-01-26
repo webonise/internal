@@ -6,14 +6,18 @@ module RedefineConstant
   end
 end
 
-# Ability to
+# Ability to provide default values for constants
 module DefaultConstant
   def default_constant(symbol, value)
     self.class.const_set(symbol, value) unless self.class.const_defined?(symbol)
   end
 end
-
 include DefaultConstant
+
+# Provide access to useful bits of active_support
+require 'active_support'                    # Useful since Rails hand-rolled autoload for reasons known only to God and DHH
+require 'active_support/core_ext/date'      # Required for the date arithmetic we want below
+require 'active_support/core_ext/numeric'   # Provides 3.days.ago and the like
 
 # Configure the logger
 require 'logger'
