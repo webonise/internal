@@ -28,7 +28,8 @@ puts "Pull Requests by User:"
 pulls_by_user = Hash.new { |hash, key| hash[key] = 0 }
 last_pull_by_user = Hash.new { |hash,key| Time.new(0) }
 pulls.each do |pull|
-  user = pull.user.login
+  user = Octokit.user pull.user.login
+  user = nice_author(user.name)
 
   pulls_by_user[user] += 1
 
