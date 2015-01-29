@@ -28,11 +28,6 @@ def print_stale_branch(repo, branch)
   return msg
 end
 
-# How we ask if you want to blow a branch away
-def prompt_for_delete(repo, branch)
-  raise "NOT IMPLEMENTED!"
-end
-
 # Retrieve the repos if we're supposed to
 repos = REPOS
 if repos.blank?
