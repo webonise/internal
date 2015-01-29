@@ -1,27 +1,27 @@
 # Provides a count of pull requests broken down by user, along with the most recent time for a pull request by that user.
 
 require_relative 'init'
-require 'pp'
 
 default_constant :PULL_STATE, "all"
 
 # Retrieve the pull requests
 pulls = []
 REPOS.each do |repo|
+  LOGGER.debug "Querying #{repo} branches: #{BRANCHES}"
   BRANCHES.each do |branch|
     LOGGER.info "Retrieving #{PULL_STATE} pull requests against #{branch} for #{repo}"
-    pulls = pulls + Octokit.pulls(repo, {
+    branch_pulls = Octokit.pulls(repo, {
       :state => PULL_STATE,
       :base => branch
     })
+    LOGGER.debug { "Pulls for #{branch} of #{repo}: #{branch_pulls.pretty_inspect}" }
+    pulls.concat(branch_pulls)
   end
 end
+LOGGER.info("Found #{pulls.size} total pull requests.")
 
 # Print out a pull request to ensure you see them
-if DEBUG
-  LOGGER.info "Sample pull request:"
-  PP.pp(pulls[0])
-end
+LOGGER.debug {"Sample pull request: #{pulls[0].pretty_inspect}" }
 
 # Count pulls by user
 puts "Pull Requests by User:"
