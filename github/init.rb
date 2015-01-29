@@ -14,7 +14,7 @@ module DefaultConstant
 end
 include DefaultConstant
 
-# Pretty printer, if you really want it
+# Require pretty printer, because otherwise pretty_inspect gives you the empty string
 require 'pp'
 
 # Provide access to useful bits of actionpack
@@ -62,7 +62,11 @@ else
 end
 
 # Now change our logging level to "debug" if we set DEBUG
-logger.level = Logger::DEBUG if defined?(DEBUG) and DEBUG
+if defined?(DEBUG) and DEBUG
+  logger.level = Logger::DEBUG
+else
+  logger.level = Logger::INFO
+end
 
 # Describes out to print a hash: if you don't like it, redefine it in your config
 unless self.respond_to? :print_hash
